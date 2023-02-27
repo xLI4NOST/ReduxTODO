@@ -1,21 +1,12 @@
-import { configStore, combineReducers } from 'redux'
-
-const defaultState = {
-    task: [],
-}
-
-const taskReducer = (state, action) => {
-    switch (action.type) {
-        case "ADD_TASK":
-            return { ...state, task: state.task + action.addTask }
-        case "REMOVE_TASK":
-            return { ...state, task: state.task - action.addTask }
+import { createStore, combineReducers } from 'redux'
+import { taskReducer } from './taskReducer'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 
-
-    default:
-            return state
+const rootReducer = combineReducers(
+    {
+        taskReducer
     }
-}
+)
 
-const store = configStore(taskReducer)
+export const store = createStore(rootReducer, composeWithDevTools())
