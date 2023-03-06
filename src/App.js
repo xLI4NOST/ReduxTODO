@@ -10,7 +10,6 @@ function App(props) {
   return (
     <div className="page">
         <Header/>
-        {/* <TaskBlock tasks={tasks} setTasks={setTasks}/> */}
         <TaskBlock/>
     </div>
   );

@@ -39,6 +39,7 @@ code {
 
 .task-form {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
@@ -48,6 +49,7 @@ code {
   border-radius: 8px;
   height: 54px;
   flex-grow: 1;
+  color: white;
 }
 
 .task-block {
@@ -67,7 +69,7 @@ code {
   font-size: 14px;
   line-height: 140%;
   background-color: #1E6F9F;
-
+  color: #F2F2F2;
 }
 
 .task-form_button__image {
@@ -91,6 +93,7 @@ code {
   color: #4EA8DE;
   display: flex;
   gap: 8px;
+  align-content: flex-end;
 }
 
 .task-block__info__score-block_type_right {
@@ -102,9 +105,14 @@ code {
   color: #8284FA;
 }
 
+.task-block__info__tasks-score{
+  margin: 0;
+}
+
+
 .task-counter {
   align-self: center;
-  width: 25px;
+  min-width: 25px;
   height: 19px;
   background-color: #333333;
   border-radius: 999px;
@@ -138,11 +146,45 @@ code {
   flex-direction: column;
 }
 
+.start-empty{
+  width: 56px;
+  height: 56px;
+  margin: 64px 0 24px 16px;
+}
+.no-task{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.no-task__title{
+  margin: 0;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  color: #808080;
+}
+.no-task__subtitle{
+  margin: 0;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 110%;
+  text-align: center;
+  color: #808080;
+}
+
+
 .task {
   width: 100%;
   min-height: 72px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   gap: 15px;
   background-color: #262626;
@@ -153,10 +195,26 @@ code {
 
 .task__status {
   cursor: pointer;
+ min-width: 24px;
   width: 24px;
   height: 24px;
-  align-self: center;
-  margin: 0 0 0 19px;
+  margin-left: 19px;
+  fill: #4EA8DE;
+}
+.task__status path:first-of-type{
+  display: none;
+}
+.task__status path:last-of-type{
+  display: none;
+}
+
+.task__status_true {
+  cursor: pointer;
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+  margin-left: 19px;
+  fill:#5E60CE;
 }
 
 .task__remove-button{
@@ -170,7 +228,10 @@ code {
   align-self: center;
 }
 .task__text{
+  flex-grow: 1;
+  word-wrap: break-word;
   max-width: 632px;
+  text-align: start;
   align-self: center;
   margin: 0;
   padding: 0;
@@ -181,3 +242,7 @@ font-size: 14px;
 line-height: 140%;
 color: #F2F2F2;
 }
+.task__text_decoration{
+  text-decoration-line: line-through;
+}
+
