@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import cipBoard from  "../../images/img/Clipboard.png"
 import { useDispatch, useSelector } from 'react-redux';
-import {taskAddAction, taskCompliteAction, taskRemoveAction} from "../../store/taskReducer";
+import {taskAddAction, taskCompliteAction, taskInitAction, taskRemoveAction} from "../../store/taskReducer";
 import {NoTask} from "./NoTask";
-
+import axios from "axios";
 
 import { Task } from "./Task";
-export function TaskBlock() {
+
+export function TaskBlock({serverRemove}) {
     const [value, setValue] = useState('')
     const dispatch = useDispatch()
     const tasks = useSelector(state=>state.taskReducer)
+
+    const [resp, setResp] = useState([])
 
     const complitedTasks= tasks.filter((task)=>{
         return task.complited != false
@@ -17,25 +20,52 @@ export function TaskBlock() {
     function handleSetTask(e) {
         setValue(e.target.value)
     }
-    const handleAddTask = () => {
-        if(value != 0 ){
-            dispatch(taskAddAction(value))
-            setValue("")
+    // const handleAddTask = () => {
+    //     if(value != 0 ){
+    //         dispatch(taskAddAction(value))
+    //         setValue("")
+    //     }
+    //
+    // }
+    console.log(tasks)
+    const postTask = async  ()=>{
+        if(value != 0){
+            const addTask= await axios.post('http://localhost:3001/tasks/' , {value:value, id:Date.now(), complited: false})
+                .then(res=>console.log(res))
+                .catch(err=>console.log(err))
+                .finally(()=>{
+                    dispatch(taskAddAction(value, false))
+                    setValue("")
+                })
         }
 
     }
-    function handleRemoveTask(id){
-        dispatch(taskRemoveAction(id))
+    const deleteTask= async (id)=>{
+        const removeTask = await axios.delete (`http://localhost:3001/tasks/${id}`)
+            .then(res=>console.log(res))
+            .catch(err=>console.log(err))
+            .finally(()=>
+                dispatch(taskRemoveAction(id))
+            )
     }
 
-    const handleCompliteTask= (id) =>{
-        dispatch(taskCompliteAction(id))
+    // const handleCompliteTask= (id) =>{
+    //     dispatch(taskCompliteAction(id))
+    // }
+
+    const compliteTask = async (id)=>{
+    const complite = await axios.patch(`http://localhost:3001/tasks/${id}`, {complited:true? false:true} )
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+        .finally(()=>{
+            dispatch(taskCompliteAction(id))
+        })
     }
 
 
     const handleKeyDown = e =>{
         if(value !== ""){
-            e.key === "Enter" && handleAddTask()
+            e.key === "Enter" && postTask()
             e.key === "Escape" && setValue('')
         }
 
@@ -45,7 +75,7 @@ export function TaskBlock() {
 
         <div className="task-form">
             <input className="header__task-input" onChange={handleSetTask} value={value || ""} onKeyDown={handleKeyDown} />
-            <button className="task-form_button" onClick={handleAddTask} >
+            <button className="task-form_button" onClick={postTask} >
                 Criar
                 <svg className="task-form_button__image" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#F2F2F2">
                     <path d="M7.98 1.45a6.53 6.53 0 1 1 0 13.07 6.53 6.53 0 0 1 0-13.07Zm0-1.45a7.98 7.98 0 1 0 .07 15.97A7.98 7.98 0 0 0 7.98 0Z"/>
@@ -73,8 +103,8 @@ export function TaskBlock() {
                     key={task.id}
                     id={task.id}
                     complited ={task.complited}
-                    remove={handleRemoveTask}
-                    toggleComplite={handleCompliteTask}
+                    remove={deleteTask}
+                    toggleComplite={compliteTask}
                     value={task.value}/>
                 )
             }
